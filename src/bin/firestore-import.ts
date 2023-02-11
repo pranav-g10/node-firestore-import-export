@@ -4,9 +4,9 @@ import {prompt} from 'enquirer';
 import colors from 'colors';
 import process from 'process';
 import fs from 'fs';
+import path from 'path';
 import {firestoreImport} from '../lib';
 import {getCredentialsFromFile, getDBReferenceFromPath, getFirestoreDBReference} from '../lib/firestore-helpers';
-import loadJsonFile from 'load-json-file';
 import {
   accountCredentialsEnvironmentKey,
   ActionAbortedError,
@@ -56,7 +56,7 @@ const unattendedConfirmation = commander[params.yesToImport.key];
   const credentials = await getCredentialsFromFile(accountCredentialsPath);
   const db = getFirestoreDBReference(credentials);
   const pathReference = await getDBReferenceFromPath(db, nodePath);
-  const data = await loadJsonFile(backupFile);
+  const data = require(path.resolve(process.cwd(), backupFile));
 
   if (!unattendedConfirmation) {
     const nodeLocation = (<FirebaseFirestore.DocumentReference | FirebaseFirestore.CollectionReference>pathReference)
