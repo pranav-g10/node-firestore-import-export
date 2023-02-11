@@ -243,6 +243,11 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
+"@snyk/protect@^1.1100.0":
+  version "1.1100.0"
+  resolved "https://registry.yarnpkg.com/@snyk/protect/-/protect-1.1100.0.tgz#52624c6fe9270729237215a88d1c798f28d2fcfb"
+  integrity sha512-nbdLbao8fqrgeWwO+RQj3Bdz0qoSeuYElHNjmH0fMiKJ1/MxR8tcma8P2xHXkDW6wYbYlUznf8gGhxAXDBe+wg==
+
 "@tootallnate/once@2":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
@@ -1681,11 +1686,6 @@ signal-exit@^3.0.2:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.7.tgz#a9a1767f8af84155114eaabd73f99273c8f59ad9"
   integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==
-
-snyk@^1.189.0:
-  version "1.1100.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.1100.0.tgz#d2702a443da8284755a7cd785c19aa74b0106748"
-  integrity sha512-f+k5tc3mU4Y48aZKLo1lM5Z7k+LlymGBQvxKXTzvQawmK6tMvbYgV1hn0JbVHDgdLeCrPpvxsTthDa75L8kteg==
 
 stream-events@^1.0.4, stream-events@^1.0.5:
   version "1.0.5"
