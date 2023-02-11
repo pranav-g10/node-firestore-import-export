@@ -1,9 +1,11 @@
+import * as admin from 'firebase-admin';
 import {anyFirebaseRef, batchExecutor, isLikeDocument, isRootOfDatabase} from './firestore-helpers';
 import {array_chunks, unserializeSpecialTypes} from './helpers';
 import {ICollection} from '../interfaces/ICollection';
 
 const importData = (data: any,
                     startingRef: anyFirebaseRef,
+                    db: admin.firestore.Firestore,
                     mergeWithExisting: boolean = true,
                     logs = false,
 ): Promise<any> => {
@@ -17,7 +19,7 @@ const importData = (data: any,
     const collectionPromises: Array<Promise<any>> = [];
     for (const collection in collections) {
       if (collections.hasOwnProperty(collection)) {
-        collectionPromises.push(setDocuments(collections[collection], startingRef.collection(collection), mergeWithExisting, logs));
+        collectionPromises.push(setDocuments(collections[collection], startingRef.collection(collection), db, mergeWithExisting, logs));
       }
     }
     if (isRootOfDatabase(startingRef)) {
@@ -26,15 +28,15 @@ const importData = (data: any,
       const documentID = startingRef.id;
       const documentData: any = {};
       documentData[documentID] = dataToImport;
-      const documentPromise = setDocuments(documentData, startingRef.parent, mergeWithExisting, logs);
+      const documentPromise = setDocuments(documentData, startingRef.parent, db, mergeWithExisting, logs);
       return documentPromise.then(() => batchExecutor(collectionPromises));
     }
   } else {
-    return setDocuments(dataToImport, <FirebaseFirestore.CollectionReference>startingRef, mergeWithExisting, logs);
+    return setDocuments(dataToImport, <FirebaseFirestore.CollectionReference>startingRef, db, mergeWithExisting, logs);
   }
 };
 
-const setDocuments = (data: ICollection, startingRef: FirebaseFirestore.CollectionReference, mergeWithExisting: boolean = true, logs = false): Promise<any> => {
+const setDocuments = (data: ICollection, startingRef: FirebaseFirestore.CollectionReference, db: admin.firestore.Firestore, mergeWithExisting: boolean = true, logs = false): Promise<any> => {
   logs && console.log(`Writing documents for ${startingRef.path}`);
   if ('__collections__' in data) {
     throw new Error('Found unexpected "__collection__" in collection data. Does the starting node match' +
@@ -54,7 +56,7 @@ const setDocuments = (data: ICollection, startingRef: FirebaseFirestore.Collecti
         });
       }
       const {__collections__, ...documents} = data[documentKey];
-      const documentData: any = unserializeSpecialTypes(documents);
+      const documentData: any = unserializeSpecialTypes(documents, db);
       batch.set(startingRef.doc(documentKey), documentData, {merge: mergeWithExisting});
     });
     return batch.commit();
@@ -62,7 +64,7 @@ const setDocuments = (data: ICollection, startingRef: FirebaseFirestore.Collecti
   return batchExecutor(chunkPromises)
     .then(() => {
       return collections.map((col) => {
-        return setDocuments(col.collection, col.path, mergeWithExisting, logs);
+        return setDocuments(col.collection, col.path, db, mergeWithExisting, logs);
       });
     })
     .then(subCollectionPromises => batchExecutor(subCollectionPromises))

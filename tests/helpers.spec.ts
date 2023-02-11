@@ -94,7 +94,7 @@ describe('Helpers', () => {
 
   describe('unserializeSpecialTypes', () => {
     admin.initializeApp();
-    const results = unserializeSpecialTypes(sampleExportedDoc);
+    const results = unserializeSpecialTypes(sampleExportedDoc, admin.firestore());
     expect(results.sampleExportedDoc.timestamp).to.be.an.instanceof(admin.firestore.Timestamp);
     expect(results.sampleExportedDoc.geopoint).to.be.an.instanceof(admin.firestore.GeoPoint);
     expect(results.sampleExportedDoc.documentRef).to.be.an.instanceof(admin.firestore.DocumentReference);

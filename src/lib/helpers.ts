@@ -52,11 +52,11 @@ const serializeSpecialTypes = (data: any) => {
   return cleaned;
 };
 
-const unserializeSpecialTypes = (data: any): any => {
+const unserializeSpecialTypes = (data: any, db: admin.firestore.Firestore): any => {
   if (isScalar(data)) {
     return data;
   } else if (Array.isArray(data)) {
-    return data.map((val: any) => unserializeSpecialTypes(val));
+    return data.map((val: any) => unserializeSpecialTypes(val, db));
   } else if (data instanceof Object) {
     let rawValue = {...data}; // Object.assign({}, data);
     if ('__datatype__' in rawValue && 'value' in rawValue) {
@@ -76,12 +76,12 @@ const unserializeSpecialTypes = (data: any): any => {
           break;
         case 'documentReference':
           rawValue = rawValue as IDocumentReference;
-          rawValue = admin.firestore().doc(rawValue.value);
+          rawValue = db.doc(rawValue.value);
           break;
       }
     } else {
       let cleaned: any = {};
-      Object.keys(rawValue).map((key: string) => cleaned[key] = unserializeSpecialTypes(data[key]));
+      Object.keys(rawValue).map((key: string) => cleaned[key] = unserializeSpecialTypes(data[key], db));
       rawValue = cleaned;
     }
     return rawValue;
