@@ -22,7 +22,7 @@
     "export": "node ./dist/bin/firestore-export.js",
     "import": "node ./dist/bin/firestore-import.js",
     "clear": "node ./dist/bin/firestore-clear.js",
-    "build": "npm run tests && rm -rf ./dist && tsc",
+    "build": "rm -rf ./dist && tsc",
     "watch": "tsc -w",
     "tests": "mocha -r ts-node/register tests/**/*.spec.ts",
     "snyk-protect": "snyk-protect",
